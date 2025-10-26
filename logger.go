@@ -1,38 +1,32 @@
-papackage main
+package main
 
 import (
 	"log"
 	"os"
 )
 
-type Logger struct{
-	infoLogger *log.Logger
+type Logger struct {
+	infoLogger  *log.Logger
 	errorLogger *log.Logger
-	verbose bool
+	verbose     bool
 }
 
-
-func NewLogger(verbose bool) *Logger{
+func NewLogger(verbose bool) *Logger {
 	var logger Logger
 
-	logger.infoLogger = log.New(os.Stdout, "INFO: ",log.LstdFlags)
-	logger.errorLogger = log.New(os.Stderr, "ERROR: ", log.LstdFlags)
+	logger.infoLogger = log.New(os.Stdout, "INFO: ", log.LstdFlags)
+	logger.errorLogger = log.New(os.Stderr, "ERROR: ", log.LstdFlags|log.Lshortfile)
 	logger.verbose = verbose
-	return  &logger
+	return &logger
 }
 
-func (l *Logger) Info(msg string){
+func (l *Logger) Info(msg string) {
+	if !l.verbose {
+		return
+	}
 	l.infoLogger.Println(msg)
 }
 
-func (l *Logger) Error(err error){
+func (l *Logger) Error(err error) {
 	l.errorLogger.Println(err)
-}
-
-func (l *Logger) Verbose(msg string){
-	if(!l.verbose){
-		return
-	}else{
-		l.infoLogger.Println(msg)
-	}
 }

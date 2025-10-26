@@ -1,10 +1,25 @@
 package main
 
-
-import "log"
-
-
+import (
+	"flag"
+	"fmt"
+)
 
 func main() {
-	// Entry point; we'll add logic step-by-step.
+	verbose := flag.Bool("v", false, "")
+
+	flag.Parse()
+
+	l := NewLogger(*verbose)
+	l.Info("Scanning network interfaces...")
+	ips := GetLocalIPs(l)
+
+	if len(ips) == 0 {
+		fmt.Println("[No IPs found!]")
+		return
+	}
+
+	for _, ip := range ips {
+		fmt.Println(ip)
+	}
 }
